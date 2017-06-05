@@ -1,5 +1,5 @@
-<?php include("../includes/layouts/header.php"); ?>
-<?php require_once("../includes/functions.php"); ?>
+<?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
+<?php require_once("../includes/functions.php"); ?> <!--Include functions-->
       <nav id = "navigation">
          &nbsp;
       </nav>
@@ -14,5 +14,5 @@
             </ul>
          </article>
       </main>
-<?php include("../includes/layouts/footer.php"); ?>
+<?php include("../includes/layouts/footer.php"); ?> <!--Page Footer-->
     

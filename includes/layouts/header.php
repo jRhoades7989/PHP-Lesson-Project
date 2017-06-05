@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-   <head>
+   <head> <!--This header will go on all pages-->
       <title>Widget Corp</title>
       <link rel = "stylesheet" type = "text/css" href = "css/styles.css" />
    </head>

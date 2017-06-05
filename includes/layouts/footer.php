@@ -1,4 +1,4 @@
-<footer id = "footer">
+<footer id = "footer"> <!--This footer will go on all pages-->
          <p>Copyright 20xx, Widget Corp</p>
       </footer>
       <script src = "js/scripts.js"></script>
