@@ -81,6 +81,12 @@ footer {
    color: #D4E6F4;
 }
 
+.group:after, .group:before{
+  content: "";
+  display: table;
+  clear: both;
+}
+
 /*NAVIGATION RULES*/
 nav {
    float: left;
@@ -136,7 +142,21 @@ article h2 {
 }
 
 
-
+/*FORM STYLES*/
+form {
+    display: flex;
+    max-width: 500px;
+    flex-flow: row wrap;
+    align-items: center;
+}
+form p {
+    flex: 0 0 100%;
+    margin: 10px 0;
+}
+input, select, label {
+    flex: 0 0 33.33%;
+    margin: 10px 0;
+}
 
 
    

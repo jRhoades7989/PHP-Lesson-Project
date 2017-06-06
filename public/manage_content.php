@@ -2,10 +2,12 @@
 <?php require_once("../includes/functions.php"); ?> <!--Include functions-->
 <?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
 <?php find_selected_page(); ?> <!--This finds what we are editing-->
-<nav id = "navigation">
+<nav id = "navigation" class = "group">
    <?php
       //Navigation takes 2 parameters and returns the list of pages and subjects
       echo navigation($current_subject, $current_page); ?> <!--Populates the left nav bar-->
+  <br />
+  <a href = "new_subject.php">+ Add a Subject</a>
 </nav>
 <main id = "page">
    <article>

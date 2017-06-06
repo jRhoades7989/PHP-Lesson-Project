@@ -5,6 +5,12 @@
         exit;
    }
 
+    function mysql_prep($string) {
+        global $connection;
+        
+        $escaped_string = mysqli_real_escape_string($connection, $string); 
+        return $escaped_string;
+    }
 // Set a default form value
    function default_form_val($value) {
            isset($_POST[$value]) ? $value = $_POST[$value] : $value = "";
@@ -132,7 +138,7 @@
          mysqli_free_result($page_set); //Lets go of an uneeded variable 
          $output .= "</li>";
          }
-      $output .= "<ul>";
+      $output .= "</ul>";
       return $output; //Returns the completed list of subjects and pages
                         //with the currently selected page/subject in bold
    }
