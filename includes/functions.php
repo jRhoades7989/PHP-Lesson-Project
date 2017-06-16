@@ -18,44 +18,6 @@
    }
 
 
-   //======================= VALIDATION FUNCTIONS =============================//
-   //
-   //CHECK PRESENCE
-   function has_presence($value) {           //$value is str
-      return isset($value) && $value !== "";
-   }
-
-   //CHECK LENGTH
-   function has_max_length($value, $max) {   //$value is str, $max is num
-      return strlen($value) <= $max;
-   }
-
-   function has_min_length($value, $min) {   //$value is str, $min is num
-      return strlen($value) >= $min;
-   }
-
-   //CHECK SET INCLUSION
-   function has_include_in($value, $set) {
-      return in_array($value, $set);
-   }
-
-   //==========================DISPLAY ERRORS===============================//
-   //
-   //DISPLAY INPUT FORM ERRORS
-   function form_errors($errors=[]) {
-        $output = "";
-        if(!empty($errors)) {
-            $output .= "<div class = \"error\">";
-            $output .= "Please fix the following errors: ";
-            $output .= "<ul>";
-            foreach ($errors as $key => $error) {
-               $output .= "<li>{$error}</li>";
-        }
-            $output .= "</ul>";
-            $output .= "</div>";
-      }
-      return $output;
-   }
    
    //DISPLAY CONNECTION ERRORS
    function confirm_query($result_set) {
@@ -94,6 +56,23 @@
    } 
 
 
+   //==========================DISPLAY ERRORS===============================//
+   //
+   //DISPLAY INPUT FORM ERRORS
+   function form_errors($errors=[]) {
+        $output = "";
+        if(!empty($errors)) {
+            $output .= "<div class = \"error\">";
+            $output .= "Please fix the following errors: ";
+            $output .= "<ul>";
+            foreach ($errors as $key => $error) {
+               $output .= "<li>{$error}</li>";
+        }
+            $output .= "</ul>";
+            $output .= "</div>";
+      }
+      return $output;
+   }
     //===============================Navigation===============================//
    //Make the selected page/subject bold in the navbar
    //Navigation takes 2 parameters and returns the list of pages and subjects

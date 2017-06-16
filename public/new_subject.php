@@ -1,3 +1,4 @@
+<?php require_once("../includes/sessions.php"); ?> <!--Initiate session-->
 <?php require_once("../includes/db_connection.php"); ?> <!--Initiate DB connection-->
 <?php require_once("../includes/functions.php"); ?> <!--Include functions-->
 <?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
@@ -9,7 +10,9 @@
     </nav>
     <main id = "page">
         <article>
-            
+            <?php echo message(); ?>
+            <?php $errors = errors(); ?>
+            <?php echo form_errors($errors); ?>
             <h2>Create Subject</h2>
             <!--This is a form to create a new subject-->
             <form action = "create_subject.php" method = "post">
