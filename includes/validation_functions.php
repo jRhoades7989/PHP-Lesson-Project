@@ -32,8 +32,8 @@ function validate_presences($required_fields)  {
         global $errors;
         //Expects an associative array
         foreach($fields_with_max_lengths as $field => $max) {
-            $vaule = trim($_POST[$field]);
-            if (!has_max_length($value,$max)) {
+            $value = trim($_POST[$field]);
+            if (!has_max_length($value, $max)) {
                 $errors[$field] = field_name_as_text($field) . " is too long";
             }
         }

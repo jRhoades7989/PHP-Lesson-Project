@@ -148,6 +148,13 @@ div.message {
     margin: 10px;
     padding: 5px;
 }
+
+.view-content {
+    margin: 1em;
+    padding: 1em;
+    border: 1px solid #999;
+}
+
 /*FORM STYLES*/
 form {
     display: flex;
