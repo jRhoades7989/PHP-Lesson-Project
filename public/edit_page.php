@@ -10,7 +10,7 @@
 
         //Retrieve form data
 
-        $required_fields = array("menu_name", "position", "visible");
+        $required_fields = array("menu_name", "position", "visible", "content");
         validate_presences($required_fields);
 
         $fields_with_max_lengths = array("menu_name"=>30);
@@ -22,14 +22,16 @@
         
             //Perform update
 
-            $id = $current_subject["id"];
+            $id = $current_page["id"];
             $menu_name = mysql_prep($_POST["menu_name"]);
             $position = (int) $_POST["position"];
             $visible = (int) $_POST["visible"];
+            $content = mysql_prep($_POST["content"]);
 
-            $query  = "UPDATE subjects SET";
+            $query  = "UPDATE pages SET";
             $query .= " menu_name = '{$menu_name}',";
             $query .= " position = {$position},";
+            $query .= " content = '{$content}',";
             $query .= " visible = {$visible}";
             $query .= " WHERE id = {$id}";
             $query .= " LIMIT 1";
@@ -40,7 +42,8 @@
             if ($result && mysqli_affected_rows($connection) >= 0) {
                 //success
                 $_SESSION["message"] = "Edited Succesfully.";
-                redirect_to("manage_content.php");
+                $id = htmlentities($id);
+                redirect_to("manage_content.php?page={$id}");
             } else {
                 //failure
                 $message = "Edit failed.";
@@ -51,13 +54,14 @@
     } //end: if (isset($_POST["submit"]))
 ?>
 <?php 
-    if (!$current_subject) {
-        //subject ID was missing or invalid or
-        //subject couldn't be found in the database
+    if (!$current_page) {
+        //page ID was missing or invalid or
+        //page couldn't be found in the database
         redirect_to("manage_content.php");
     }
 ?>
 <?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
+
 <nav id = "navigation">
     <?php
         //Navigation takes 2 parameters and returns the list of pages and subjects
@@ -71,24 +75,24 @@
                 }
             ?>
             <?php echo form_errors($errors); ?>
-            <h2>Edit Subject: <?php echo htmlentities($current_subject["menu_name"]); ?></h2>
+            <h2>Edit Page: <?php echo htmlentities($current_page["menu_name"]); ?></h2>
 
-            <!--This is a form to edit a subject-->
-            <form action = "edit_subject.php?subject=<?php echo urlencode($current_subject["id"]);?>" method = "post">
+            <!--This is a form to edit a page-->
+            <form action = "edit_page.php?page=<?php echo urlencode($current_page["id"]);?>" method = "post">
 
-                <!--Sets the name of the current subject-->
+                <!--Sets the name of the current page-->
                 <label for = "menu_name">Menu name:</label>
-                <input id = "menu_name" type = "text" name = "menu_name" value = "<?php echo htmlentities($current_subject["menu_name"]); ?>"/>
+                <input id = "menu_name" type = "text" name = "menu_name" value = "<?php echo htmlentities($current_page["menu_name"]); ?>"/>
 
-                <!--Sets position of current subject-->
+                <!--Sets position of current page-->
                 <label for = "position">Position:</label>
                 <select id = "position" name = "position">
                     <?php 
-                        $subject_set = find_all_subjects();
-                        $subject_count = mysqli_num_rows($subject_set);
-                        for($count = 1; $count <= $subject_count; $count++) {
+                        $page_set = find_pages_for_subject($current_page["subject_id"]);
+                        $page_count = mysqli_num_rows($page_set);
+                        for($count = 1; $count <= $page_count; $count++) {
                             echo "<option value = \"{$count}\"";
-                            if ($current_subject["position"] == $count) {
+                            if ($current_page["position"] == $count) {
                                 echo "selected";
                             }
                             echo ">{$count}</option>";
@@ -96,25 +100,29 @@
                     ?>
                 </select>
 
-                <!--Sets the visibility of the current subject-->
+                <!--Sets the visibility of the current page-->
                 <p>Visible: 
-                    <input type = "radio" name = "visible" value = "0" <?php if ($current_subject["visible"] == 0) {echo "checked";} ?>/> No
+                    <input type = "radio" name = "visible" value = "0" <?php if ($current_page["visible"] == 0) {echo "checked";} ?>/> No
                     &nbsp;
-                    <input type = "radio" name = "visible" value = "1" <?php if ($current_subject["visible"] == 1) {echo "checked";} ?>/> Yes
+                    <input type = "radio" name = "visible" value = "1" <?php if ($current_page["visible"] == 1) {echo "checked";} ?>/> Yes
                 </p>
+                </br>
+                <textarea name = "content">
+                    <?php echo htmlentities($current_page["content"]); ?>
+                </textarea>
+                    
 
                 <!--Submits form-->
-                <input type = "submit" name = "submit" value = "Edit Subject" />
+                <input type = "submit" name = "submit" value = "Edit Page" />
             </form>
 
             <br />
             <a href = "manage_content.php">Cancel</a>
             &nbsp;
             &nbsp;
-            <a href = "delete_subject.php?subject=<?php echo urlencode($current_subject["id"]); ?>" onclick="return confirm('Are you sure?')">Delete subject</a>
+            <a href = "delete_page.php?page=<?php echo urlencode($current_page["id"]); ?>" onclick="return confirm('Are you sure?')">Delete page</a>
 
         </article>
     </main>
+
 <?php include("../includes/layouts/footer.php"); ?> <!--Page Footer-->
-
-

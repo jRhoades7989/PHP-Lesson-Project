@@ -172,5 +172,15 @@ input, select, label {
 }
 
 
-   
+/*errors*/
+.error {
+    color: #8d0d19;
+    border: 2px solid #8d0d19;
+    margin: 1em 0;
+    padding: 1em;
+}
+
+.error ul {
+    padding-left: 2em;
+}
    
