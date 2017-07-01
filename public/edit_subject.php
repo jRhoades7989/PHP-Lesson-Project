@@ -40,7 +40,7 @@
             if ($result && mysqli_affected_rows($connection) >= 0) {
                 //success
                 $_SESSION["message"] = "Edited Succesfully.";
-                redirect_to("manage_content.php");
+                redirect_to("manage_content.php?subject={$current_subject_id}");
             } else {
                 //failure
                 $message = "Edit failed.";
@@ -61,7 +61,10 @@
 <nav id = "navigation">
     <?php
         //Navigation takes 2 parameters and returns the list of pages and subjects
-        echo navigation($current_subject, $current_page); ?> <!--Populates the left nav bar-->
+        echo navigation($current_subject, $current_page);
+        $current_subject_id = $current_subject["id"];
+        $_SESSION["subject_id"] = $current_subject_id;
+        ?> <!--Populates the left nav bar-->
     </nav>
     <main id = "page">
         <article>
@@ -108,10 +111,10 @@
             </form>
 
             <br />
-            <a href = "manage_content.php">Cancel</a>
+            <a href = "manage_content.php?subject=<?php echo $current_subject_id;?>">Cancel</a>
             &nbsp;
             &nbsp;
-            <a href = "delete_subject.php?subject=<?php echo urlencode($current_subject["id"]); ?>" onclick="return confirm('Are you sure?')">Delete subject</a>
+            <a href = "delete_subject.php?subject=<?php echo $current_subject_id; ?>" onclick="return confirm('Are you sure?')">Delete subject</a>
 
         </article>
     </main>

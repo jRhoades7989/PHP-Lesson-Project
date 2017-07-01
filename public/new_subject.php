@@ -6,7 +6,9 @@
 <nav id = "navigation">
     <?php
         //Navigation takes 2 parameters and returns the list of pages and subjects
-        echo navigation($current_subject, $current_page); ?> <!--Populates the left nav bar-->
+        echo navigation($current_subject, $current_page); 
+        $_SESSION["subject_id"] = $current_subject["id"];
+        ?> <!--Populates the left nav bar-->
     </nav>
     <main id = "page">
         <article>

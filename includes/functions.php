@@ -20,9 +20,9 @@
 
    
    //DISPLAY CONNECTION ERRORS
-   function confirm_query($result_set) {
+   function confirm_query($result_set, $function) {
       if (!$result_set) {
-         die("Database query failed");
+         die("Database query failed due to {$function}");
       }
    }
 
@@ -35,7 +35,7 @@
         $query .= "from subjects ";
         $query .= "order by position asc";
         $subject_set = mysqli_query($connection, $query);
-        confirm_query($subject_set);
+        confirm_query($subject_set, "find all subjects");
         return $subject_set;
    }
     
@@ -49,7 +49,7 @@
         $query .= "WHERE subject_id = {$safe_subject_id} ";
         $query .= "ORDER BY position ASC";
         $page_set= mysqli_query($connection, $query);
-        confirm_query($page_set);
+        confirm_query($page_set, "find pages for subject");
         return $page_set;
    } 
 
@@ -130,10 +130,10 @@
         $safe_subject_id = mysqli_real_escape_string($connection, $subject_id);
         $query = "SELECT * ";
         $query .= "FROM subjects ";
-        $query .= "WHERE id = {$safe_subject_id} ";
+        $query .= "WHERE id={$safe_subject_id} ";
         $query .= "LIMIT 1 ";
         $subject_set= mysqli_query($connection, $query);
-        confirm_query($subject_set);  //Makes sure there's not an issue with the query
+        confirm_query($subject_set, "find subject by id");  //Makes sure there's not an issue with the query
         //This if statement either returns the selected subject, or null if there is none
         if($subject = mysqli_fetch_assoc($subject_set)) { 
             return $subject;
@@ -152,7 +152,7 @@
         $query .= "WHERE id = {$safe_page_id} ";
         $query .= "LIMIT 1 ";
         $page_set = mysqli_query($connection, $query);
-        confirm_query($page_set);
+        confirm_query($page_set, "find page by id");
         //This if statement either returns the selected page, or null if there is none
         if($page = mysqli_fetch_assoc($page_set)) {
             return $page;

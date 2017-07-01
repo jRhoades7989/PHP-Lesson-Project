@@ -24,4 +24,24 @@
             return $errors;
         }
     }
+
+    function new_page_id() {
+        if (isset($_SESSION["new_page_id"])) {
+        $new_page_id = ($_SESSION["new_page_id"]);
+
+        $_SESSION["new_page_id"] = null;
+
+        return $new_page_id;
+        }
+    }
+
+    function current_subject_id() {
+        if (isset($_SESSION["subject_id"])) {
+            $current_subject_id = urlencode($_SESSION["subject_id"]);
+
+            $_SESSION["subject_id"] = null;
+
+            return $current_subject_id;
+        }
+    }
 ?>

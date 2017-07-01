@@ -5,7 +5,32 @@
 <?php find_selected_page(); ?> <!--This finds what we are editing-->
 
 <?php 
-    if (isset($_POST["submit"])) {
+    if(isset($_POST["delete"])) {
+    //Page was deleted
+        $current_page = find_page_by_id($_GET["page"]);
+        if (!$current_page) {
+            //page ID was missing or invalid or
+            //page couldn't be found in the database
+            redirect_to("manage_content.php");
+        }
+
+        $current_page_id = urlencode($current_page["id"]);
+        $current_subject_id = urlencode($_SESSION["subject_id"]);
+        
+        $query = "DELETE FROM pages WHERE id = {$current_page_id} LIMIT 1";
+        $result = mysqli_query($connection, $query);
+
+        if ($result && mysqli_affected_rows($connection) == 1) {
+            //success
+            $_SESSION["message"] = "Page deleted.";
+            redirect_to("manage_content.php?subject={$current_subject_id}");
+        } else {
+            //failure
+            $_SESSION["message"] = "Page deletion failed.";
+            redirect_to("manage_content.php?page={$current_page_id}");
+        }
+    
+    } elseif (isset($_POST["submit"])) {
         //Form was submitted
 
         //Retrieve form data
@@ -42,7 +67,7 @@
             if ($result && mysqli_affected_rows($connection) >= 0) {
                 //success
                 $_SESSION["message"] = "Edited Succesfully.";
-                $id = htmlentities($id);
+                $id = urlencode($id);
                 redirect_to("manage_content.php?page={$id}");
             } else {
                 //failure
@@ -65,7 +90,10 @@
 <nav id = "navigation">
     <?php
         //Navigation takes 2 parameters and returns the list of pages and subjects
-        echo navigation($current_subject, $current_page); ?> <!--Populates the left nav bar-->
+        echo navigation($current_subject, $current_page); 
+        //Lets us use subject id after page deletion
+        $_SESSION["subject_id"] = $current_page["subject_id"];     
+    ?> <!--Populates the left nav bar-->
     </nav>
     <main id = "page">
         <article>
@@ -117,11 +145,12 @@
             </form>
 
             <br />
-            <a href = "manage_content.php">Cancel</a>
+            <a href = "manage_content.php?page=<?php echo urlencode($current_page["id"]);?>">Cancel</a>
             &nbsp;
             &nbsp;
-            <a href = "delete_page.php?page=<?php echo urlencode($current_page["id"]); ?>" onclick="return confirm('Are you sure?')">Delete page</a>
-
+            <form method="post" action="edit_page.php?page=<?php echo urlencode($current_page["id"]);?>" id="delete">
+                <input type = "hidden" name ="delete" value = "true" />
+                <a href = "edit_page.php?page=<?php echo urlencode($current_page['id']);?>" onclick="confirm('Are You Sure'); document.getElementById('delete').submit(); return false;">Delete page</a>
         </article>
     </main>
 

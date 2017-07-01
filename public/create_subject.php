@@ -11,6 +11,7 @@
         $menu_name = mysql_prep($_POST["menu_name"]);
         $position = (int) $_POST["position"];
         $visible = (int) $_POST["visible"];
+        $current_subject_id = urlencode($_SESSION["subject_id"]);
 
         $required_fields = array("menu_name", "position", "visible");
         validate_presences($required_fields);
@@ -36,8 +37,19 @@
 
         if ($result) {
             //success
-            $_SESSION["message"] = "Subject created.";
-            redirect_to("manage_content.php");
+            $subject_query  = "SELECT id FROM subjects ";
+            $subject_query .= "ORDER BY id DESC LIMIT 1";
+
+            $subject_result = mysqli_query($connection, $subject_query);
+            
+            if($subject_result) {
+                $new_subject = mysqli_fetch_assoc($subject_result);
+                $new_subject_id = urlencode($new_subject["id"]);
+                redirect_to("manage_content.php?subject={$new_subject_id}");
+            } else {
+                $_SESSION["message"] = "Something went wonky. Try again?";
+                redirect_to("new_subject.php");
+            }
         } else {
             //failure
             $_SESSION["message"] = "Subject creation failed.";
