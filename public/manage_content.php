@@ -1,6 +1,7 @@
 <?php require_once("../includes/sessions.php"); ?> <!--Initiate session-->
 <?php require_once("../includes/db_connection.php"); ?> <!--Initiate DB connection-->
 <?php require_once("../includes/functions.php"); ?> <!--Include functions-->
+<?php $layout_context = "admin"; ?>
 <?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
 <?php find_selected_page(); ?> <!--This finds what we are editing-->
 <nav id = "navigation" class = "group">

@@ -1,5 +1,6 @@
-<?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
 <?php require_once("../includes/functions.php"); ?> <!--Include functions-->
+<?php $layout_context = "admin"; ?>
+<?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
       <nav id = "navigation">
          &nbsp;
       </nav>

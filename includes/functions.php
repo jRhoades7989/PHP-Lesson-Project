@@ -29,10 +29,13 @@
    //+++++++++++++++++++++++++DB QUERIES+++++++++++++++++++++++++++++++++++//
    //
    //QUERY SUBJECTS AND RETURN THEM AS AN ARRAY
-   function find_all_subjects() {
+   function find_all_subjects($public=true) {
         global $connection;
         $query = "select * ";
         $query .= "from subjects ";
+        if ($public) {
+            $query .= "WHERE visible=1 ";
+            }
         $query .= "order by position asc";
         $subject_set = mysqli_query($connection, $query);
         confirm_query($subject_set, "find all subjects");
@@ -40,13 +43,16 @@
    }
     
     //QUERY PAGES AND RETURN THEM AS AN ARRAY
-   function find_pages_for_subject($subject_id) {
+   function find_pages_for_subject($subject_id, $public=true) {
         global $connection;
         $safe_subject_id = mysqli_real_escape_string($connection, $subject_id);
 
         $query = "SELECT * ";
         $query .= "FROM pages ";
         $query .= "WHERE subject_id = {$safe_subject_id} ";
+        if($public) {
+            $query .= "AND visible=1 ";
+        }
         $query .= "ORDER BY position ASC";
         $page_set= mysqli_query($connection, $query);
         confirm_query($page_set, "find pages for subject");
@@ -80,7 +86,7 @@
    function navigation($subject_array, $page_array) {
       $output = "<ul class = \"subjects\">"; //Starts an unordered list for subjects/pages
 
-      $subject_set = find_all_subjects(); //Returns all subjects in an array
+      $subject_set = find_all_subjects(false); //Returns all subjects in an array
 
     //This loop runs while there are still subjects in the $subject_set array
     //It will return a list item for each subject
@@ -96,7 +102,7 @@
          $output .= htmlentities($subject["menu_name"]); 
          $output .= "</a>";
 
-         $page_set = find_pages_for_subject($subject["id"]); 
+         $page_set = find_pages_for_subject($subject["id"], false); 
          $output .= "<ul class = \"pages\">";
 
          //This loop runs while there are still pages in the $page_set array
@@ -182,6 +188,54 @@
             $current_page = null;
         }
     }
+
+   function public_navigation($subject_array, $page_array) {
+      $output = "<ul class = \"subjects\">"; //Starts an unordered list for subjects/pages
+
+      $subject_set = find_all_subjects(); //Returns all subjects in an array
+
+    //This loop runs while there are still subjects in the $subject_set array
+    //It will return a list item for each subject
+      while($subject = mysqli_fetch_assoc($subject_set)) {  
+         $output .= "<li";
+         if ($subject_array && $subject["id"] == $subject_array["id"]) {
+         $output .= " class = \"selected\"";
+         }
+         $output .= " >"; 
+         $output .= "<a href = \"index.php?subject=";
+         $output .= urlencode($subject["id"]);
+         $output .= "\" >";
+         $output .= htmlentities($subject["menu_name"]); 
+         $output .= "</a>";
+
+         $page_set = find_pages_for_subject($subject["id"]); 
+
+         if ($subject_array["id"] == $subject["id"] || $page_array["subject_id"] == $subject["id"]) {
+             $output .= "<ul class = \"pages\">";
+
+             //This loop runs while there are still pages in the $page_set array
+             //It will return a sublist of pages for each subject
+             while($page = mysqli_fetch_assoc($page_set)) {
+                $output .= "<li";
+                if ($page_array && $page["id"] == $page_array["id"]) {
+                   $output .= " class = \"selected\"";
+             }
+                $output .= " >"; 
+                $output .= "<a href = \"index.php?page=";
+                $output .= urlencode($page["id"]);
+                $output .= "\" >";
+                $output .= htmlentities($page["menu_name"]);
+                $output .= "</a></li>";
+             }
+             $output .= "</ul>";
+             mysqli_free_result($page_set); //Lets go of an uneeded variable 
+             $output .= "</li>";
+             }
+         }
+      $output .= "</ul>";
+      return $output; //Returns the completed list of subjects and pages
+                        //with the currently selected page/subject in bold
+   }
 ?>
 
 

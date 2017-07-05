@@ -64,6 +64,7 @@
     }
 ?>
 
+<?php $layout_context = "admin"; ?>
 <?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
 <?php find_selected_page(); ?> <!--This finds what we are editing-->
 <nav id = "navigation">

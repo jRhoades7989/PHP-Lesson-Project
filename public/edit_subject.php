@@ -40,7 +40,7 @@
             if ($result && mysqli_affected_rows($connection) >= 0) {
                 //success
                 $_SESSION["message"] = "Edited Succesfully.";
-                redirect_to("manage_content.php?subject={$current_subject_id}");
+                redirect_to("manage_content.php?subject={$id}");
             } else {
                 //failure
                 $message = "Edit failed.";
@@ -57,6 +57,7 @@
         redirect_to("manage_content.php");
     }
 ?>
+<?php $layout_context = "admin"; ?>
 <?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
 <nav id = "navigation">
     <?php
