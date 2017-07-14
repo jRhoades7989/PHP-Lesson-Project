@@ -4,7 +4,7 @@
 
 
 <?php 
-    $current_subject = find_subject_by_id($_GET["subject"]);
+    $current_subject = find_subject_by_id($_GET["subject"], false);
     if (!$current_subject) {
         //subject ID was missing or invalid or
         //subject couldn't be found in the database

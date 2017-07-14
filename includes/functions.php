@@ -51,7 +51,7 @@
         $query .= "FROM pages ";
         $query .= "WHERE subject_id = {$safe_subject_id} ";
         if($public) {
-            $query .= "AND visible=1 ";
+            $query .= "AND visible = 1 ";
         }
         $query .= "ORDER BY position ASC";
         $page_set= mysqli_query($connection, $query);
@@ -130,13 +130,16 @@
 
 
     //If there is a selected subject, this will return the subject name
-   function find_subject_by_id($subject_id) {
+   function find_subject_by_id($subject_id, $public=true) {
         global $connection;
       
         $safe_subject_id = mysqli_real_escape_string($connection, $subject_id);
         $query = "SELECT * ";
         $query .= "FROM subjects ";
         $query .= "WHERE id={$safe_subject_id} ";
+        if($public) {
+            $query .= "AND visible = 1 ";
+        }
         $query .= "LIMIT 1 ";
         $subject_set= mysqli_query($connection, $query);
         confirm_query($subject_set, "find subject by id");  //Makes sure there's not an issue with the query
@@ -149,13 +152,16 @@
    }
 
     //If there is a selected page, this will return the page name
-    function find_page_by_id($page_id) {
+    function find_page_by_id($page_id, $public=true) {
         global $connection;
       
         $safe_page_id = mysqli_real_escape_string($connection, $page_id);
         $query = "SELECT * ";
         $query .= "FROM pages ";
         $query .= "WHERE id = {$safe_page_id} ";
+        if ($public) {
+            $query .= "AND visible = 1 ";
+        }
         $query .= "LIMIT 1 ";
         $page_set = mysqli_query($connection, $query);
         confirm_query($page_set, "find page by id");
@@ -167,20 +173,32 @@
         }
    }
    
+    function find_default_page_for_subject($subject_id) {
+        $page_set = find_pages_for_subject($subject_id);
+        if($first_page = mysqli_fetch_assoc($page_set)) {
+            return $first_page;
+        } else {
+            return null;
+        }
+    }
 
     //This will set what the current item is, and whether or not it's a page or a subject 
-    function find_selected_page () {
+    function find_selected_page ($public=false) {
         global $current_subject;
         global $current_page;
 
         //This if statement will return subject and null if subject is set
         if (isset($_GET["subject"])) {
-            $current_subject = find_subject_by_id($_GET["subject"]);
-            $current_page = null;
+            $current_subject = find_subject_by_id($_GET["subject"], $public);
+            if($current_subject && $public) {
+                $current_page = find_default_page_for_subject($current_subject["id"]);
+            } else {
+                $current_page = null;
+            }
         
         //This option will return page and null if page is set
         } elseif (isset($_GET["page"])) {
-            $current_page = find_page_by_id($_GET["page"]);
+            $current_page = find_page_by_id($_GET["page"], $public);
 
         //If neither are set, This option will retunr null and null
         } else {

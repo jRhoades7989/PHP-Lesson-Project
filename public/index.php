@@ -3,7 +3,7 @@
 <?php require_once("../includes/functions.php"); ?> <!--Include functions-->
 <?php $layout_context = "public" ?>
 <?php include("../includes/layouts/header.php"); ?> <!--Page Header-->
-<?php find_selected_page(); ?> <!--This finds what we are editing-->
+<?php find_selected_page(true); ?> <!--This finds what we are editing-->
 <nav id = "navigation" class = "group">
     <br />
    <?php
@@ -13,17 +13,13 @@
 </nav>
 <main id = "page">
    <article>
-
-     <!--Displays selected subject to edit-->
-      <?php if ($current_subject) {?>
-      <h2>Manage Subject: <?php echo htmlentities($current_subject["menu_name"]);  ?></h2>
-    
     <!--Displays selected page to edit-->
-      <?php } elseif ($current_page) { ?>
+      <?php if ($current_page) { ?>
+            <h2><?php echo htmlentities($current_page["menu_name"]); ?></h2> 
             <?php echo htmlentities($current_page["content"]); ?> 
 
       <?php } else { ?>
-        Please select a subject or a page.
+        <p>Welcome!</p>
       <?php } ?>
 
    </article>
