@@ -127,6 +127,7 @@ ul.pages {
 article {
    float: left;
    height: 100%;
+   width: 50%;
    padding-left: 2em;
    vertical-align: top;
    background: #EEE4B9;
@@ -139,6 +140,15 @@ article h2, article h3 {
 
 article h2 {
    margin-top: 1em;
+}
+
+table {
+    width: 500px;
+}
+
+th {
+    font-weight: bold;
+    text-align: left;
 }
 
 div.message {

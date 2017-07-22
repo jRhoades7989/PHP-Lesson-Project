@@ -29,6 +29,17 @@
    //+++++++++++++++++++++++++DB QUERIES+++++++++++++++++++++++++++++++++++//
    //
    //QUERY SUBJECTS AND RETURN THEM AS AN ARRAY
+   function find_all_admins() {
+        global $connection;
+
+        $query = "SELECT * ";
+        $query .= "FROM admins ";
+        $query .= "ORDER BY username ASC";
+        $admins_set = mysqli_query($connection, $query);
+        confirm_query($admins_set, "find all admins");
+        return $admins_set;
+   }
+
    function find_all_subjects($public=true) {
         global $connection;
         $query = "select * ";
