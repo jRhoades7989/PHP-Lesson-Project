@@ -265,6 +265,50 @@
       return $output; //Returns the completed list of subjects and pages
                         //with the currently selected page/subject in bold
    }
+
+   //=======================Admin Management================================
+
+    function display_admins() {
+
+        $admins_set = find_all_admins();
+        $output = '';
+        while ($admin = mysqli_fetch_assoc($admins_set)) {
+            $current_admin = $admin["id"];
+            $output .= '<tr>';
+            $output .= '<td>';
+            $output .= htmlentities($admin["username"]);
+            $output .= '</td>';
+            $output .= '<td><input type = "hidden" name ="delete';
+            $output .= $current_admin;
+            $output .='" value = "true" />';
+            $output .= '<a href="edit_admin.php?id=';
+            $output .= $admin["id"] . '">Edit</a> <a href = "manage_admins.php';
+            $output .= '?id=';
+            $output .= $admin["id"] . '" onclick="return confirm';
+            $output .= '(\'Are you sure?\'); ';
+            $output .= 'document.querySelector(';
+            $output .= "'[name='delete{$admin['id']}']').submit();";
+            $output .= '">Delete</a>';
+            $output .= '</tr>';
+        }
+        return $output;
+    }
+
+    function find_admin_by_id($admin_id) {
+        global $connection;
+      
+        $safe_admin_id = mysqli_real_escape_string($connection, $admin_id);
+        $query = "SELECT * ";
+        $query .= "FROM admins ";
+        $query .= "WHERE id = {$safe_admin_id} ";
+        $query .= "LIMIT 1 ";
+        $admin_set = mysqli_query($connection, $query);
+        confirm_query($admin_set, "find admin by id");
+        //This if statement either returns the selected page, or null if there is none
+        if($admin = mysqli_fetch_assoc($admin_set)) {
+            return $admin;
+            } else {
+            return null;
+        }
+   }
 ?>
-
-

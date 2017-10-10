@@ -44,4 +44,14 @@
             return $current_subject_id;
         }
     }
+
+    function admin_id() {
+        if(isset($_SESSION["admin_id"])) {
+            $admin_id = $_SESSION["admin_id"];
+
+            $_SESSION["admin_id"] = null;
+
+            return $admin_id;
+        }
+    }
 ?>
